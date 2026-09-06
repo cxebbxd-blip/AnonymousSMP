@@ -2,9 +2,6 @@
 build/
 .idea/
 *.iml
-node_modules/
-verification/server/
-verification/results/
 *.log
 .env
 .env.*

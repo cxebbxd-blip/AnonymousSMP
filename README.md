@@ -39,18 +39,15 @@ On Windows, use `gradlew.bat clean build`. The wrapper selects Gradle 9.3.1. The
 
 The plugin uses the Paper API with a small version specific packet adapter for 1.21.11. Java source and tests contain no explanatory comments. The original Gradle launcher license headers are preserved.
 
-## Verification
+## Tests and source layout
 
-The Gradle build runs unit tests and verifies both bundled texture signatures against Mojang's public keys. The separate `verification` harness launches a disposable localhost Paper server with synthetic offline accounts and checks the packets received by multiple headless clients.
+The plugin and its unit tests are written entirely in Java. Node.js and Python are not needed to build or run it. This repository contains the Java source, bundled resources, Java tests, Gradle build files, and license documents.
 
-```sh
-python verification/assets.py
-./gradlew clean build
-npm install --no-save mineflayer@4.39.0
-node verification/smoke.js
-```
+`./gradlew clean build` compiles the plugin and runs the Java unit tests, including both bundled texture signature checks against the included Mojang public keys. GitHub Actions runs the same build and uploads the plugin JAR and test reports.
 
-Run the harness in a disposable development directory, not a live server directory. Use Node.js 22 and Python 3. It writes under `verification/server` and `verification/results` and accepts the Minecraft EULA for that test server. It does not run inside the plugin. See [VERIFICATION.md](VERIFICATION.md) for the tested scope.
+Gradle's Kotlin build scripts and wrapper launchers are build tooling, not plugin code. They remain in the repository so anyone can build it, and are excluded from GitHub's language percentages. No non-Java source files are relabeled as Java.
+
+See [VERIFICATION.md](VERIFICATION.md) for the test scope and the distinction between the current Java tests and earlier live server checks.
 
 ## Privacy limits
 

@@ -1,4 +1,4 @@
-name: Build and verify
+name: Build and test
 on:
   push:
     branches: [main]
@@ -12,33 +12,26 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '21'
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
       - uses: gradle/actions/setup-gradle@v4
-      - name: Build and test
-        run: ./gradlew --no-daemon clean build > build-output.log 2>&1
-      - name: Prepare disposable Paper server
-        run: python verification/assets.py > assets.log 2>&1
-      - name: Run live regression tests
-        run: |
-          npm install --no-save mineflayer@4.39.0 > npm-install.log 2>&1
-          node verification/smoke.js > smoke.log 2>&1
-      - name: Package source and checksums
-        if: always()
-        run: python verification/package.py
+      - name: Build and run Java tests
+        run: ./gradlew --no-daemon clean build
+      - name: Checksum
+        run: sha256sum build/libs/AnonymousSMP.jar
+      - uses: actions/upload-artifact@v4
+        with:
+          name: AnonymousSMP
+          path: build/libs/AnonymousSMP.jar
+          if-no-files-found: error
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: AnonymousSMP
+          name: JavaTestReports
           path: |
-            build/libs/AnonymousSMP.jar
-            AnonymousSMPSource.zip
-            build/reports/tests/**
-            build/test-results/**
-            verification/results/**
-            *.log
+            build/reports/tests/test/
+            build/test-results/test/

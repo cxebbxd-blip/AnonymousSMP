@@ -1,0 +1,5 @@
+build.gradle.kts -linguist-detectable
+settings.gradle.kts -linguist-detectable
+gradlew linguist-vendored
+gradlew.bat linguist-vendored
+gradle/wrapper/** linguist-vendored
