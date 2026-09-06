@@ -2,9 +2,10 @@ name: Build and verify
 on:
   push:
     branches: [main]
+  pull_request:
   workflow_dispatch:
 permissions:
-  contents: write
+  contents: read
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -19,27 +20,6 @@ jobs:
         with:
           node-version: '22'
       - uses: gradle/actions/setup-gradle@v4
-        with:
-          gradle-version: '9.3.1'
-      - name: Add verified wrapper files
-        if: ${{ hashFiles('gradle/wrapper/gradle-wrapper.jar') == '' }}
-        run: |
-          mkdir -p "$RUNNER_TEMP/anonymous-wrapper"
-          printf "rootProject.name = 'wrapper'\n" > "$RUNNER_TEMP/anonymous-wrapper/settings.gradle"
-          gradle --no-daemon -p "$RUNNER_TEMP/anonymous-wrapper" wrapper --gradle-version 9.3.1
-          cp "$RUNNER_TEMP/anonymous-wrapper/gradle/wrapper/gradle-wrapper.jar" gradle/wrapper/gradle-wrapper.jar
-          echo 'b3a875ddc1f044746e1b1a55f645584505f4a10438c1afea9f15e92a7c42ec13  gradle/wrapper/gradle-wrapper.jar' | sha256sum -c -
-          python - <<'PY'
-          import pathlib,zipfile
-          pathlib.Path('licenses').mkdir(exist_ok=True)
-          with zipfile.ZipFile('gradle/wrapper/gradle-wrapper.jar') as z:
-              pathlib.Path('licenses/GradleWrapperLicense.txt').write_bytes(z.read('META-INF/LICENSE'))
-          PY
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add gradle/wrapper/gradle-wrapper.jar licenses/GradleWrapperLicense.txt
-          git commit -m 'Add verified Gradle wrapper'
-          git push
       - name: Build and test
         run: ./gradlew --no-daemon clean build > build-output.log 2>&1
       - name: Prepare disposable Paper server
