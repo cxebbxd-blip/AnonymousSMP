@@ -19,7 +19,7 @@ tasks.test { useJUnitPlatform() }
 tasks.processResources { filesMatching("plugin.yml") { expand("version" to project.version) } }
 tasks.jar {
     archiveFileName.set("AnonymousSMP.jar")
-    from("LICENSE", "NOTICE") { into("META-INF") }
+    from(listOf("LICENSE", "NOTICE")) { into("META-INF") }
     manifest.attributes["paperweight-mappings-namespace"] = "mojang"
 }
 tasks.register<Copy>("exportDeps") {
