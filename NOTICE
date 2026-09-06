@@ -1,0 +1,12 @@
+AnonymousSMP source is distributed under the MIT license in LICENSE.
+
+The Gradle wrapper and launcher scripts are from Gradle, Inc. and retain
+their upstream Apache License 2.0 notices. https://www.apache.org/licenses/LICENSE-2.0
+
+Minecraft and Steve textures belong to Mojang/Microsoft and are not relicensed
+by this project. The bundled classic Steve texture property was located in
+SkinsRestorer's public skin metadata. No SkinsRestorer implementation is included.
+Both signed texture properties are verified against Mojang's public keys.
+
+Paper, Minecraft server code, and other build dependencies are not bundled in
+the plugin and retain their respective licenses.

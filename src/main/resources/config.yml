@@ -1,0 +1,11 @@
+scrambling: false
+skins: true
+nametags: true
+tab: true
+chat: true
+join-quit: true
+death-messages: true
+advancements: true
+locator-protection: true
+
+locator-restore: {}

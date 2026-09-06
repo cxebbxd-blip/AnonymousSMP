@@ -1,0 +1,15 @@
+name: AnonymousSMP
+version: '${version}'
+main: dev.cxebby.anonymous.AnonymousSMP
+api-version: '1.21.11'
+author: Cxebby
+description: Simple anonymous gameplay with a private staff view.
+website: https://discord.gg/Z7fYhESTH
+commands:
+  anonymous:
+    description: AnonymousSMP settings and controls
+    usage: /anonymous settings | scramble | unscramble | check
+permissions:
+  anonymous.admin:
+    description: Manage AnonymousSMP and toggle a private real name view.
+    default: op
